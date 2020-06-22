@@ -103,6 +103,29 @@ objLoader.load('back-wall.obj', function(object) {
 	scene.add(object);
 })
 
+var objLoader = new THREE.OBJLoader();
+objLoader.setPath('/obj/');
+objLoader.load('window-wall.obj', function(object) {
+	scene.add(object);
+})
+
+var objLoader = new THREE.OBJLoader();
+objLoader.setPath('/obj/');
+objLoader.load('window-frame.obj', function(object) {
+	scene.add(object);
+})
+
+var objLoader = new THREE.OBJLoader();
+objLoader.setPath('/obj/');
+objLoader.load('table-feet.obj', function(object) {
+	scene.add(object);
+})
+var objLoader = new THREE.OBJLoader();
+objLoader.setPath('/obj/');
+objLoader.load('table-p2.obj', function(object) {
+	scene.add(object);
+})
+
 
 // Funcao para animar a cena
 var animate = function () {
