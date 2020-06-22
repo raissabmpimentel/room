@@ -1,0 +1,231 @@
+<html>
+   <head>
+      <title>ThayTV.js app</title>
+      <style>canvas { width: 100%; height: 100% }</style>
+   </head>
+<body>
+    <div id="container"></div>
+    <script src="js/three.js"></script>
+    <script id="vertexVideoShader" type="x-shader/x-vertex">
+      varying vec2 vUv;
+
+      void main() {
+        vUv = uv;
+        gl_Position = projectionMatrix*modelViewMatrix*vec4(position, 1.0);
+      }
+    </script>
+    <script id="fragmentVideoShader" type="x-shader/x-fragment">
+        uniform sampler2D u_tDiffuse;
+        uniform vec2 u_resolution;
+        uniform float u_time;
+        uniform float u_amount;
+        uniform float u_angle;
+        uniform float u_magnitude;
+
+        varying vec2 vUv;
+
+        float randomHoriz(vec2 st) {
+            return fract(sin(dot(st.xy, vec2(0,10000.0)))*43758.5453123)/8.0;
+        }
+
+        float random (vec2 st) {
+            return fract(sin(dot(st.xy ,vec2(12.9898,78.233))) * 43758.5453)/2.0;
+        }
+
+        void main() {
+          vec2 st = gl_FragCoord.xy/u_resolution.xy;
+          st *= u_amount; // Scale the coordinate system by 10
+          vec2 ipos = floor(st);  // get the integer coords
+
+          // Assign a random value based on the integer coord
+          float noise = randomHoriz(ipos*u_time);
+
+          float rdn = random(ipos*u_time);
+          vec2 offset = u_magnitude*(1.0+rdn)*vec2( cos(u_angle*(1.0+rdn)), sin(u_angle*(1.0+rdn)));
+          vec4 red = texture2D(u_tDiffuse, vUv + offset);
+          vec4 green = texture2D(u_tDiffuse, vUv);
+          vec4 blue = texture2D(u_tDiffuse, vUv - offset);
+
+          //gl_FragColor = vec4(vec3(color.x - noise.x, color.y - noise.y, color.z - noise.z),0.1);
+          gl_FragColor = vec4(red.r - noise, green.g - noise, blue.b - noise, 1.0);
+      }
+    </script>
+    <script id="vertexNoiseShader" type="x-shader/x-vertex">
+      varying vec2 vUv;
+
+      void main() {
+        vUv = uv;
+        gl_Position = projectionMatrix*modelViewMatrix*vec4(position, 1.0);
+      }
+    </script>
+    <script id="fragmentNoiseShader" type="x-shader/x-fragment">
+        uniform vec2 u_resolution;
+        uniform float u_time;
+        uniform float u_amount;
+
+        varying vec2 vUv;
+
+        float random2(vec2 st) {
+            return fract(sin(dot(st.xy ,vec2(12.9898,78.233))) * 43758.5453);
+        }
+
+        void main() {
+          vec2 st = gl_FragCoord.xy/u_resolution.xy;
+          st *= u_amount; // Scale the coordinate system by 10
+          vec2 ipos = floor(st);  // get the integer coords
+
+          // Assign a random value based on the integer coord
+          vec3 noise = vec3(random2(ipos*u_time));
+
+          gl_FragColor = vec4(noise, 1.0);
+      }
+    </script>
+    <script>
+        var container;
+        var camera, scene, renderer;
+        var uniforms;
+        var noise = false;
+        var meshNoise, meshVideo;
+        var time = 65;
+        var video, texture;
+        var soundVideo, soundNoise;
+        var listener;
+
+        init();
+        render();
+
+        function init() {
+            scene = new THREE.Scene();
+            container = document.getElementById( 'container' );
+
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+            camera.position.z = 2;
+
+            video = document.createElement('video');
+  					video.loop = true;
+  					video.muted = true;
+  					video.src = 'res/samara.mp4';
+  					texture = new THREE.VideoTexture( video );
+  					texture.minFilter = THREE.LinearFilter;
+  					texture.magFilter = THREE.LinearFilter;
+  					texture.format = THREE.RGBFormat;
+
+  					var geometry = new THREE.PlaneGeometry( 3, 2, 1);
+
+            uniformsVideo = {
+                u_tDiffuse: { type: "t", value: texture },
+                u_amount: { type: "f", value: 40.0 },
+                u_time: { type: "f", value: 1.0 },
+                u_resolution: { type: "v2", value: new THREE.Vector2() },
+                u_angle:    { type: "f", value: 0.05 },
+                u_magnitude:    { type: "f", value: 0.01 }
+            };
+            var materialVideo = new THREE.ShaderMaterial( {
+                uniforms: uniformsVideo,
+                vertexShader: document.getElementById( 'vertexVideoShader' ).textContent,
+                fragmentShader: document.getElementById( 'fragmentVideoShader' ).textContent
+            } );
+            meshVideo = new THREE.Mesh( geometry, materialVideo );
+
+            uniformsNoise = {
+                u_amount: { type: "f", value: 100.0 },
+                u_time: { type: "f", value: 1.0 },
+                u_resolution: { type: "v2", value: new THREE.Vector2() },
+            };
+            var materialNoise = new THREE.ShaderMaterial( {
+                uniforms: uniformsNoise,
+                vertexShader: document.getElementById( 'vertexNoiseShader' ).textContent,
+                fragmentShader: document.getElementById( 'fragmentNoiseShader' ).textContent
+            } );
+            meshNoise = new THREE.Mesh( geometry, materialNoise );
+
+
+            listenerNoise = new THREE.AudioListener();
+            listenerVideo = new THREE.AudioListener();
+            soundNoise = new THREE.PositionalAudio(listenerVideo);
+            soundVideo = new THREE.PositionalAudio(listenerVideo);
+            soundVideo.load('res/samara.mp4');
+
+            var audioLoader = new THREE.AudioLoader();
+            audioLoader.load( 'res/tvnoise.mp4', function( buffer ) {
+            	soundNoise.setBuffer( buffer );
+              soundNoise.setLoop( true );
+            	soundNoise.setVolume( 0.1 );
+            	soundNoise.play();
+            });
+
+            camera.add( listenerNoise );
+            camera.add( listenerVideo );
+
+            renderer = new THREE.WebGLRenderer();
+  					renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio( window.devicePixelRatio );
+
+            container.appendChild(renderer.domElement);
+
+            onWindowResize();
+            window.addEventListener('resize', onWindowResize, false);
+
+        }
+
+        function onWindowResize( event ) {
+            renderer.setSize( window.innerWidth, window.innerHeight );
+            uniformsVideo.u_resolution.value.x = renderer.domElement.width;
+            uniformsVideo.u_resolution.value.y = renderer.domElement.height;
+            uniformsNoise.u_resolution.value.x = renderer.domElement.width;
+            uniformsNoise.u_resolution.value.y = renderer.domElement.height;
+        }
+
+        function randomizeParams() {
+					uniformsVideo.u_amount.value = Math.random() * 100;
+          uniformsNoise.u_amount.value = 400 + Math.random()*(1000 - 400);
+				}
+
+        function render() {
+            randomizeParams();
+            if(time > 58){
+              time = 0.0;
+
+              if(noise == false){
+                uniformsNoise.u_time.value = time;
+
+                soundNoise.setVolume(0.1);
+                soundVideo.setVolume(0.0);
+
+                scene.remove(meshVideo);
+                scene.add(meshNoise);
+
+                noise = true;
+              } else{
+                uniformsVideo.u_time.value = time;
+
+                soundVideo.setVolume(0.7);
+                soundNoise.setVolume(0.0);
+                soundVideo.play();
+                video.play();
+
+                scene.remove(meshNoise);
+                scene.add(meshVideo);
+
+                noise = false;
+              }
+            } else {
+              time += 0.05;
+
+              if(noise == true){
+                uniformsNoise.u_time.value = time;
+              } else{
+                uniformsVideo.u_time.value = time;
+              }
+            }
+
+            // if (video.readyState === video.HAVE_ENOUGH_DATA) {
+      			// 	if (texture) texture.needsUpdate = true;
+      			// }
+
+            requestAnimationFrame(render);
+            renderer.render( scene, camera );
+        }
+    </script>
+</body>
+</html>
