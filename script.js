@@ -46,6 +46,18 @@ scene.add(backLight);
 
 // Iluminacao
 
+// Background
+//scene.background = new THREE.CubeTextureLoader()
+//	.setPath( 'background/' )
+//	.load( [
+//		'xpos.png',
+//		'xneg.png',
+//		'ypos.png',
+//		'yneg.png',
+//		'zpos.png',
+//		'zneg.png'
+//	] );
+
 // Fim das configuracoes finais
 
 // Visualização dos eixos
