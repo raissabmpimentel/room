@@ -1,3 +1,4 @@
+// Declaracao de variaveis
 var noise = false;
 var time = 65;
 var soundVideo, soundNoise;
@@ -7,10 +8,11 @@ var texture;
 // Definicao da cena
 var scene = new THREE.Scene();
 
-// Camera dev
+// Camera
 var camera = new THREE.PerspectiveCamera( 50, window.innerWidth/window.innerHeight, 0.1, 100000 );
 camera.position.set(200,0,200); 
 
+// Renderer
 var renderer = new THREE.WebGLRenderer({
 canvas:document.getElementById("mycanvas"),
 antialias:true,
@@ -21,13 +23,14 @@ renderer.setClearColor("#b3bdc9");
 document.body.appendChild( renderer.domElement );
 renderer.setPixelRatio( window.devicePixelRatio );
 
+// Controle da camera
 var controls = new THREE.OrbitControls(camera, renderer.domElement);
  controls.enableDamping = true;
  controls.dampingFactor = 0.25;
  controls.enableZoom = true;
 
 
-// Iluminacao dev
+// Iluminacao
 var keyLight = new THREE.DirectionalLight(0x808080, 0.5);
 keyLight.position.set(-100, 0, 100);
 
@@ -37,14 +40,9 @@ fillLight.position.set(100, 0, 100);
 var fillLight2 = new THREE.DirectionalLight(0x808080, 0.5);
 fillLight2.position.set(100, 100, 100);
 
-// var backLight = new THREE.DirectionalLight(0xffffff, 0.35);
-//  backLight.position.set(100, 0, -100).normalize();
-
 scene.add(keyLight);
 scene.add(fillLight);
 scene.add(fillLight2);
-//scene.add(backLight);
-
 
 // Background
 scene.background = new THREE.CubeTextureLoader()
@@ -58,13 +56,13 @@ scene.background = new THREE.CubeTextureLoader()
 		'negz.jpg'
 	] );
 
-// Fim das configuracoes finais
-
-// Visualização dos eixos
+// Visualização dos eixos (RETIRAR DEPOIS)
 var axesHelper = new THREE.AxesHelper(4);
 scene.add(axesHelper);
 
-// Importando alguns modelos para visualizacao (apenas .obj)
+// Importacao de modelos junto com mapeamento de material (de textura ou cor)
+
+// Batente da TV
 texture = new THREE.TextureLoader().load('img/wood.jpg');
 texture.wrapS = THREE.RepeatWrapping;
 texture.wrapT = THREE.RepeatWrapping;
@@ -92,7 +90,8 @@ objLoader.load('shelves-sup.obj', function(object) {
 	scene.add(object);
 })
 
-var mat_sofa = new THREE.MeshLambertMaterial({color: 0x214365});
+// Sofa
+var mat_sofa = new THREE.MeshLambertMaterial({color: 0x8c8c97});
 var objLoader = new THREE.OBJLoader();
 objLoader.setPath('/obj/');
 objLoader.load('sofa-base.obj', function(object) {
@@ -126,10 +125,12 @@ objLoader.load('sofa-p2.obj', function(object) {
 	scene.add(object);
 })
 
+// Chao
 texture = new THREE.TextureLoader().load('img/carpet.jpg');
 texture.wrapS = THREE.RepeatWrapping;
 texture.wrapT = THREE.RepeatWrapping;
-texture.repeat.set( 10, 10 );
+texture.repeat.set( 5, 5 );
+texture.anisotropy = 16;
 var mat_fl = new THREE.MeshLambertMaterial({map: texture, color: 0xffffff});
 var objLoader = new THREE.OBJLoader();
 objLoader.setPath('/obj/');
@@ -142,13 +143,14 @@ objLoader.load('floor.obj', function(object) {
 	scene.add(object);
 })
 
-
+// Teto
 var objLoader = new THREE.OBJLoader();
 objLoader.setPath('/obj/');
 objLoader.load('ceiling.obj', function(object) {
 	scene.add(object);
 })
 
+// Paredes
 texture = new THREE.TextureLoader().load('img/brick.jpg');
 texture.wrapS = THREE.RepeatWrapping;
 texture.wrapT = THREE.RepeatWrapping;
@@ -187,7 +189,7 @@ objLoader.load('window-frame.obj', function(object) {
 	scene.add(object);
 })
 
-
+// Mesa
 var objLoader = new THREE.OBJLoader();
 objLoader.setPath('/obj/');
 objLoader.load('table-feet.obj', function(object) {
@@ -210,7 +212,7 @@ objLoader.load('table-p2.obj', function(object) {
 	scene.add(object);
 })
 
-
+// Lampada
 var mat_light = new THREE.MeshLambertMaterial({color: 0xFFFFCC});
 var objLoader = new THREE.OBJLoader();
 objLoader.setPath('/obj/');
@@ -232,6 +234,7 @@ objLoader.load('light-base.obj', function(object) {
 	scene.add(object);
 })
 
+// Molde da TV
 var mat_tv = new THREE.MeshLambertMaterial({color: 0xFFFFFF});
 var objLoader = new THREE.OBJLoader();
 objLoader.setPath('/obj/');
@@ -245,16 +248,17 @@ objLoader.load('TV-frame.obj', function(object) {
 	scene.add(object);
 })
 
-var light2 = new THREE.PointLight(0xffffff, 0.75, 80);
-light2.position.set(-100, 50, -10);
-scene.add(light2);
+// Luz para destacar a lampada
+var light_aux = new THREE.PointLight(0xffffff, 0.75, 80);
+light_aux.position.set(-100, 50, -10);
+scene.add(light_aux);
 
-pointlight = new THREE.PointLight( 0xFFFFCC, 0.85);
-pointlight.position.set( -100, 50, -70 );
+// Luz amarela que sai da lampada
+pointlight = new THREE.PointLight( 0xFFFFCC, 0.85, 0);
+pointlight.position.set( -100, 50, -70 ); // Posicao proima da lampada
 scene.add( pointlight );
 
 // Animacao TV
-
 var video = document.createElement('video');
 video.loop = true;
 video.muted = true;
@@ -263,13 +267,6 @@ var texture = new THREE.VideoTexture( video );
 texture.minFilter = THREE.LinearFilter;
 texture.magFilter = THREE.LinearFilter;
 texture.format = THREE.RGBFormat;
-
-// PlaneGeometry reserva para TV-screen
-// var geometry = new THREE.PlaneGeometry( 120, 68, 1);
-// var material = new THREE.MeshBasicMaterial( {color: 0xffff00, side: THREE.DoubleSide} );
-// var plane = new THREE.Mesh( geometry, material );
-// plane.position.set(-89,-29,-206); // ajuste aproximado
-// scene.add( plane );
 
 var geometry = new THREE.PlaneGeometry( 120, 68, 1);
 var uniformsVideo = {
@@ -313,7 +310,7 @@ function randomizeParams() {
 	uniformsNoise.u_amount.value = 400 + Math.random()*(1000 - 400);
 }
 
-
+// Para ouvir o audio
 listenerNoise = new THREE.AudioListener();
 listenerVideo = new THREE.AudioListener();
 soundNoise = new THREE.PositionalAudio(listenerNoise);
@@ -380,6 +377,7 @@ var animate = function () {
 	renderer.render(scene, camera);
 };
 
+// Funcao para ajustar parametros da cena com o redimensionamento
 function onWindowResize() {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
@@ -390,7 +388,6 @@ function onWindowResize() {
 	uniformsNoise.u_resolution.value.y = renderer.domElement.height;
 }
 window.addEventListener('resize', onWindowResize, false);
-
 
 // Invoca o loop da animação
 animate();
