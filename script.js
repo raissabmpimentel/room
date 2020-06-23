@@ -138,6 +138,12 @@ objLoader.load('table-p2.obj', function(object) {
 	scene.add(object);
 })
 
+// PlaneGeometry reserva para TV-screen
+//var geometry = new THREE.PlaneGeometry( 120, 68, 1);
+//var material = new THREE.MeshBasicMaterial( {color: 0xffff00, side: THREE.DoubleSide} );
+//var plane = new THREE.Mesh( geometry, material );
+//plane.position.set(-89,-29,-206); // ajuste aproximado
+//scene.add( plane );
 
 // Funcao para animar a cena
 var animate = function () {
