@@ -50,12 +50,12 @@ scene.add(backLight);
 //scene.background = new THREE.CubeTextureLoader()
 //	.setPath( 'background/' )
 //	.load( [
-//		'xpos.png',
-//		'xneg.png',
-//		'ypos.png',
-//		'yneg.png',
-//		'zpos.png',
-//		'zneg.png'
+//		'posx.jpg',
+//		'negx.jpg',
+//		'posy.jpg',
+//		'negy.jpg',
+//		'posz.jpg',
+//		'negz.jpg'
 //	] );
 
 // Fim das configuracoes finais
