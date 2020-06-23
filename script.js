@@ -1,6 +1,6 @@
 // Declaracao de variaveis
 var noise = false;
-var time = 65;
+var time = 30;
 var soundVideo, soundNoise;
 var listenerNoise, listenerVideo;
 var texture;
@@ -10,7 +10,7 @@ var scene = new THREE.Scene();
 
 // Camera
 var camera = new THREE.PerspectiveCamera( 50, window.innerWidth/window.innerHeight, 0.1, 100000 );
-camera.position.set(200,0,200); 
+camera.position.set(200,0,200);
 
 // Renderer
 var renderer = new THREE.WebGLRenderer({
@@ -227,7 +227,7 @@ objLoader.load('light-bulb.obj', function(object) {
 			child.material = mat_light;
         }
 	});
-	
+
 	scene.add(object);
 })
 
@@ -268,7 +268,7 @@ scene.add( pointlight );
 
 // Animacao TV
 var video = document.createElement('video');
-video.loop = true;
+video.loop = false;
 video.muted = true;
 video.src = 'res/samara.mp4';
 var texture = new THREE.VideoTexture( video );
@@ -318,6 +318,18 @@ function randomizeParams() {
 	uniformsNoise.u_amount.value = 400 + Math.random()*(1000 - 400);
 }
 
+// Controllers
+var soundParams = {
+	mute: false,
+  volume: 50
+};
+
+gui = new dat.GUI();
+var f1 = gui.addFolder('Sound');
+f1.add(soundParams, 'mute').onChange(onToggleMute);
+f1.add(soundParams, 'volume', 0, 100).step(1).onChange(onVolumeChange);
+gui.close();
+
 // Para ouvir o audio
 listenerNoise = new THREE.AudioListener();
 listenerVideo = new THREE.AudioListener();
@@ -328,25 +340,46 @@ soundVideo.load('res/samara.mp4');
 var audioLoader = new THREE.AudioLoader();
 audioLoader.load( 'res/tvnoise.mp4', function( buffer ) {
 	soundNoise.setBuffer( buffer );
-  	soundNoise.setLoop( true );
-	soundNoise.setVolume( 0.1 );
+  soundNoise.setLoop( true );
+	soundNoise.setVolume( 0.1 *(soundParams.mute == true ? 0.0 : 1.0)*(soundParams.volume/100) );
 	soundNoise.play();
 });
 
 scene.add( listenerNoise );
 scene.add( listenerVideo );
 
+function onToggleMute() {
+	if(soundParams.mute == true){
+    soundNoise.setVolume(0.0);
+    soundVideo.setVolume(0.0);
+  } else {
+    if(noise == true){
+      soundNoise.setVolume(0.1*(soundParams.volume/100));
+    } else {
+      soundVideo.setVolume(0.7*(soundParams.volume/100));
+    }
+  }
+}
+
+function onVolumeChange() {
+	if(noise == true){
+    soundNoise.setVolume(0.1*(soundParams.mute == true ? 0.0 : 1.0)*(soundParams.volume/100));
+  } else {
+    soundVideo.setVolume(0.7*(soundParams.mute == true ? 0.0 : 1.0)*(soundParams.volume/100));
+  }
+}
+
 // Funcao para animar a cena
 var animate = function () {
 
 	randomizeParams();
-	if(time > 58){
+	if(time > 29){
 		time = 0.0;
 
 		if(noise == false){
 		uniformsNoise.u_time.value = time;
 
-		soundNoise.setVolume(0.1);
+		soundNoise.setVolume(0.1*(soundParams.mute == true ? 0 : 1)*(soundParams.volume/100));
 		soundVideo.setVolume(0.0);
 
 		scene.remove(meshVideo);
@@ -356,7 +389,7 @@ var animate = function () {
 		} else{
 		uniformsVideo.u_time.value = time;
 
-		soundVideo.setVolume(0.7);
+		soundVideo.setVolume(0.7*(soundParams.mute == true ? 0 : 1)*(soundParams.volume/100));
 		soundNoise.setVolume(0.0);
 		soundVideo.play();
 		video.play();
@@ -395,6 +428,7 @@ function onWindowResize() {
 	uniformsNoise.u_resolution.value.x = renderer.domElement.width;
 	uniformsNoise.u_resolution.value.y = renderer.domElement.height;
 }
+
 window.addEventListener('resize', onWindowResize, false);
 
 // Invoca o loop da animação
