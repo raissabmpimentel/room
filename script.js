@@ -338,6 +338,17 @@ objLoader.load('TV-frame.obj', function(object) {
 	scene.add(object);
 })
 
+// Light Controllers
+var lightParams = {
+  lamp: 100,
+  ambient: 100
+}
+
+gui = new dat.GUI();
+var f1 = gui.addFolder('Lights');
+f1.add(lightParams, 'lamp', 0, 100).step(1).onChange(onLampIntensityChange);
+f1.add(lightParams, 'ambient', 0, 100).step(1).onChange(onAmbientLightIntensityChange);
+
 // Luz para destacar a lampada
 var light_aux_1 = new THREE.PointLight(0xFFFFCC, 0.75, 80);
 light_aux_1.position.set(-100, 50, -10);
@@ -351,6 +362,21 @@ scene.add(light_aux_2);
 pointlight = new THREE.PointLight( 0xFFFFCC, 0.85, 0);
 pointlight.position.set( -100, 50, -80 ); // Posicao proxima da lampada
 scene.add( pointlight );
+
+function onLampIntensityChange() {
+  light_aux_1.intensity = 0.75*(lightParams.lamp/100);
+  light_aux_2 .intensity = 0.75*(lightParams.lamp/100);
+  pointlight.intensity = 0.85*(lightParams.lamp/100);
+  console.log("entrou");
+}
+
+function onAmbientLightIntensityChange() {
+  keyLight.intensity = 0.5*(lightParams.ambient/100);
+  fillLight.intensity = 0.75*(lightParams.ambient/100);
+  fillLight2.intensity = 0.5*(lightParams.ambient/100);
+  fillLight3.intensity = 1*(lightParams.ambient/100);
+}
+
 
 // Animacao TV
 var video = document.createElement('video');
@@ -404,16 +430,15 @@ function randomizeParams() {
 	uniformsNoise.u_amount.value = 400 + Math.random()*(1000 - 400);
 }
 
-// Controllers
+// Audio Controllers
 var soundParams = {
 	mute: false,
   volume: 50
 };
 
-gui = new dat.GUI();
-var f1 = gui.addFolder('Sound');
-f1.add(soundParams, 'mute').onChange(onToggleMute);
-f1.add(soundParams, 'volume', 0, 100).step(1).onChange(onVolumeChange);
+var f2 = gui.addFolder('Sound');
+f2.add(soundParams, 'mute').onChange(onToggleMute);
+f2.add(soundParams, 'volume', 0, 100).step(1).onChange(onVolumeChange);
 gui.close();
 
 // Para ouvir o audio
@@ -427,7 +452,7 @@ var audioLoader = new THREE.AudioLoader();
 audioLoader.load( 'res/tvnoise.mp4', function( buffer ) {
 	soundNoise.setBuffer( buffer );
   soundNoise.setLoop( true );
-	soundNoise.setVolume( 0.1 *(soundParams.mute == true ? 0.0 : 1.0)*(soundParams.volume/100) );
+	soundNoise.setVolume( 0.1 );
 	soundNoise.play();
 });
 
