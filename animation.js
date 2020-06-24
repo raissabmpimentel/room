@@ -1,11 +1,11 @@
 // Audio
-var soundVideo, soundNoise;
 var listener;
 listener = new THREE.AudioListener();
-soundNoise = new THREE.PositionalAudio(listener);
-soundVideo = new THREE.PositionalAudio(listener);
+
+var soundVideo = new THREE.PositionalAudio(listener);
 soundVideo.load('res/samara.mp4');
 
+var soundNoise = new THREE.PositionalAudio(listener);
 var audioLoader = new THREE.AudioLoader();
 audioLoader.load( 'res/tvnoise.mp4', function( buffer ) {
 	soundNoise.setBuffer( buffer );
