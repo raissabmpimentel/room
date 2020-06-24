@@ -113,6 +113,7 @@ texture = new THREE.TextureLoader().load('img/brick.jpg');
 texture.wrapS = THREE.RepeatWrapping;
 texture.wrapT = THREE.RepeatWrapping;
 texture.repeat.set( 5, 3 );
+texture.anisotropy = 16;
 var mat_wall_1 = new THREE.MeshLambertMaterial({map: texture, color: 0xFFFFFF});
 var objLoader = new THREE.OBJLoader();
 objLoader.setPath('obj/');
@@ -129,6 +130,7 @@ texture = new THREE.TextureLoader().load('img/brick2.jpg');
 texture.wrapS = THREE.RepeatWrapping;
 texture.wrapT = THREE.RepeatWrapping;
 texture.repeat.set( 4, 6 );
+texture.anisotropy = 16;
 var mat_wall_2 = new THREE.MeshLambertMaterial({map: texture, color: 0xFFFFFF});
 var objLoader = new THREE.OBJLoader();
 objLoader.setPath('obj/');
@@ -145,6 +147,7 @@ texture = new THREE.TextureLoader().load('img/brick.jpg');
 texture.wrapS = THREE.RepeatWrapping;
 texture.wrapT = THREE.RepeatWrapping;
 texture.repeat.set( 5, 3 );
+texture.anisotropy = 16;
 var mat_wall_3 = new THREE.MeshLambertMaterial({map: texture, color: 0xFFFFFF});
 var objLoader = new THREE.OBJLoader();
 objLoader.setPath('obj/');
@@ -161,6 +164,7 @@ texture = new THREE.TextureLoader().load('img/brick.jpg');
 texture.wrapS = THREE.RepeatWrapping;
 texture.wrapT = THREE.RepeatWrapping;
 texture.repeat.set( 5, 3 );
+texture.anisotropy = 16;
 var mat_wall_4 = new THREE.MeshLambertMaterial({map: texture, color: 0xFFFFFF});
 var objLoader = new THREE.OBJLoader();
 objLoader.setPath('obj/');
@@ -222,12 +226,13 @@ objLoader.load('table-feet.obj', function(object) {
 	scene.add(object);
 })
 
+var mat_wood_2 = new THREE.MeshLambertMaterial({color: 0x96653A});
 var objLoader = new THREE.OBJLoader();
 objLoader.setPath('obj/');
 objLoader.load('table-p2.obj', function(object) {
 	object.traverse(function(child) {
         if (child instanceof THREE.Mesh){
-            child.material = mat_wood;
+            child.material = mat_wood_2;
         }
     });
 	scene.add(object);

@@ -24,16 +24,28 @@ var controls = new THREE.OrbitControls(camera, renderer.domElement);
 
 // Luz para destacar a lampada
 var light_aux_1 = new THREE.PointLight(0xFFFFCC, 0.75, 80);
-light_aux_1.position.set(-100, 50, -10);
+light_aux_1.position.set(-90, 50, -10);
 scene.add(light_aux_1);
 
 var light_aux_2 = new THREE.PointLight(0xFFFFCC, 0.75, 80);
-light_aux_2.position.set(-100, 50, -100);
+light_aux_2.position.set(-80, 50, -95);
 scene.add(light_aux_2);
 
+var light_aux_3 = new THREE.PointLight( 0xFFFFCC,  0.75, 80 );
+light_aux_3.position.set( -60, 50, -60 );
+scene.add( light_aux_3 );
+
+var light_aux_4 = new THREE.PointLight( 0xFFFFCC,  1.5, 80 );
+light_aux_4.position.set( -150, 50, -110 );
+scene.add( light_aux_4 );
+
+var light_aux_5 = new THREE.PointLight( 0xFFFFCC,  1.3, 80 );
+light_aux_5.position.set( -150, 50, -40 );
+scene.add( light_aux_5 );
+
 // Luz amarela que sai da lampada
-pointlight = new THREE.PointLight( 0xFFFFCC, 0.85, 0);
-pointlight.position.set( -100, 50, -80 ); // Posicao proxima da lampada
+pointlight = new THREE.PointLight( 0xFFFFCC, 1, 0);
+pointlight.position.set( -100, 50, -65 ); // Posicao proxima da lampada
 scene.add( pointlight );
 
 // Iluminacao ambiente
