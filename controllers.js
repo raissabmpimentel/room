@@ -16,7 +16,6 @@ function onLampIntensityChange() {
   light_aux_4.intensity = 1.5*(lightParams.lamp/100);
   light_aux_5.intensity = 1.3*(lightParams.lamp/100);
   pointlight.intensity = 1*(lightParams.lamp/100);
-  console.log("entrou");
 }
 
 function onAmbientLightIntensityChange() {
