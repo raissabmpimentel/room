@@ -10,10 +10,6 @@ scene.background = new THREE.CubeTextureLoader()
 		'negz.jpg'
 	] );
 
-// Visualização dos eixos (RETIRAR DEPOIS)
-// var axesHelper = new THREE.AxesHelper(4);
-// scene.add(axesHelper);
-
 // Importacao de modelos junto com mapeamento de material (de textura ou cor)
 var texture;
 
@@ -24,7 +20,7 @@ texture.wrapT = THREE.RepeatWrapping;
 texture.repeat.set( 5, 3 );
 var mat_wood = new THREE.MeshLambertMaterial({map: texture, color: 0xffffff});
 var objLoader = new THREE.OBJLoader();
-objLoader.setPath('/obj/');
+objLoader.setPath('obj/');
 objLoader.load('shelves.obj', function(object) {
 	object.traverse(function(child) {
         if (child instanceof THREE.Mesh){
@@ -42,7 +38,7 @@ var mat_sup = new THREE.MeshPhongMaterial({
   shininess: 20
 });
 var objLoader = new THREE.OBJLoader();
-objLoader.setPath('/obj/');
+objLoader.setPath('obj/');
 objLoader.load('shelves-sup.obj', function(object) {
 	object.traverse(function(child) {
         if (child instanceof THREE.Mesh){
@@ -55,7 +51,7 @@ objLoader.load('shelves-sup.obj', function(object) {
 // Sofa
 var mat_sofa = new THREE.MeshLambertMaterial({color: 0x8c8c97});
 var objLoader = new THREE.OBJLoader();
-objLoader.setPath('/obj/');
+objLoader.setPath('obj/');
 objLoader.load('sofa-base.obj', function(object) {
 	object.traverse(function(child) {
         if (child instanceof THREE.Mesh){
@@ -66,7 +62,7 @@ objLoader.load('sofa-base.obj', function(object) {
 })
 
 var objLoader = new THREE.OBJLoader();
-objLoader.setPath('/obj/');
+objLoader.setPath('obj/');
 objLoader.load('sofa-p1.obj', function(object) {
 	object.traverse(function(child) {
         if (child instanceof THREE.Mesh){
@@ -77,7 +73,7 @@ objLoader.load('sofa-p1.obj', function(object) {
 })
 
 var objLoader = new THREE.OBJLoader();
-objLoader.setPath('/obj/');
+objLoader.setPath('obj/');
 objLoader.load('sofa-p2.obj', function(object) {
 	object.traverse(function(child) {
         if (child instanceof THREE.Mesh){
@@ -95,7 +91,7 @@ texture.repeat.set( 5, 5 );
 texture.anisotropy = 16;
 var mat_fl = new THREE.MeshLambertMaterial({map: texture, color: 0xffffff});
 var objLoader = new THREE.OBJLoader();
-objLoader.setPath('/obj/');
+objLoader.setPath('obj/');
 objLoader.load('floor.obj', function(object) {
 	object.traverse(function(child) {
         if (child instanceof THREE.Mesh){
@@ -107,7 +103,7 @@ objLoader.load('floor.obj', function(object) {
 
 // Teto
 var objLoader = new THREE.OBJLoader();
-objLoader.setPath('/obj/');
+objLoader.setPath('obj/');
 objLoader.load('ceiling.obj', function(object) {
 	scene.add(object);
 })
@@ -119,7 +115,7 @@ texture.wrapT = THREE.RepeatWrapping;
 texture.repeat.set( 5, 3 );
 var mat_wall_1 = new THREE.MeshLambertMaterial({map: texture, color: 0xFFFFFF});
 var objLoader = new THREE.OBJLoader();
-objLoader.setPath('/obj/');
+objLoader.setPath('obj/');
 objLoader.load('back-wall.obj', function(object) {
 	object.traverse(function(child) {
         if (child instanceof THREE.Mesh){
@@ -135,7 +131,7 @@ texture.wrapT = THREE.RepeatWrapping;
 texture.repeat.set( 4, 6 );
 var mat_wall_2 = new THREE.MeshLambertMaterial({map: texture, color: 0xFFFFFF});
 var objLoader = new THREE.OBJLoader();
-objLoader.setPath('/obj/');
+objLoader.setPath('obj/');
 objLoader.load('window-wall.obj', function(object) {
 	object.traverse(function(child) {
         if (child instanceof THREE.Mesh){
@@ -151,7 +147,7 @@ texture.wrapT = THREE.RepeatWrapping;
 texture.repeat.set( 5, 3 );
 var mat_wall_3 = new THREE.MeshLambertMaterial({map: texture, color: 0xFFFFFF});
 var objLoader = new THREE.OBJLoader();
-objLoader.setPath('/obj/');
+objLoader.setPath('obj/');
 objLoader.load('wall1.obj', function(object) {
 	object.traverse(function(child) {
         if (child instanceof THREE.Mesh){
@@ -167,7 +163,7 @@ texture.wrapT = THREE.RepeatWrapping;
 texture.repeat.set( 5, 3 );
 var mat_wall_4 = new THREE.MeshLambertMaterial({map: texture, color: 0xFFFFFF});
 var objLoader = new THREE.OBJLoader();
-objLoader.setPath('/obj/');
+objLoader.setPath('obj/');
 objLoader.load('wall2.obj', function(object) {
 	object.traverse(function(child) {
         if (child instanceof THREE.Mesh){
@@ -184,7 +180,7 @@ var mat_frame = new THREE.MeshStandardMaterial({color: 0x9c9c9c,
     envMapIntensity: 3
 });
 var objLoader = new THREE.OBJLoader();
-objLoader.setPath('/obj/');
+objLoader.setPath('obj/');
 objLoader.load('window-frame.obj', function(object) {
   object.traverse(function(child) {
         if (child instanceof THREE.Mesh){
@@ -204,7 +200,7 @@ var mat_glass = new THREE.MeshPhysicalMaterial({
 	transparent: true
 });
 var objLoader = new THREE.OBJLoader();
-objLoader.setPath('/obj/');
+objLoader.setPath('obj/');
 objLoader.load('window-glass.obj', function(object) {
   object.traverse(function(child) {
         if (child instanceof THREE.Mesh){
@@ -216,7 +212,7 @@ objLoader.load('window-glass.obj', function(object) {
 
 // Mesa
 var objLoader = new THREE.OBJLoader();
-objLoader.setPath('/obj/');
+objLoader.setPath('obj/');
 objLoader.load('table-feet.obj', function(object) {
 	object.traverse(function(child) {
         if (child instanceof THREE.Mesh){
@@ -227,7 +223,7 @@ objLoader.load('table-feet.obj', function(object) {
 })
 
 var objLoader = new THREE.OBJLoader();
-objLoader.setPath('/obj/');
+objLoader.setPath('obj/');
 objLoader.load('table-p2.obj', function(object) {
 	object.traverse(function(child) {
         if (child instanceof THREE.Mesh){
@@ -240,7 +236,7 @@ objLoader.load('table-p2.obj', function(object) {
 // Lampada
 var mat_light = new THREE.MeshLambertMaterial({color: 0xFFFFCC});
 var objLoader = new THREE.OBJLoader();
-objLoader.setPath('/obj/');
+objLoader.setPath('obj/');
 objLoader.load('light-bulb.obj', function(object) {
 	object.traverse(function(child) {
         if (child instanceof THREE.Mesh){
@@ -259,7 +255,7 @@ var mat_lightbase = new THREE.MeshPhysicalMaterial({color: 0xa8a8a8,
         clearcoatRoughness: 0.5
 });
 var objLoader = new THREE.OBJLoader();
-  objLoader.setPath('/obj/');
+  objLoader.setPath('obj/');
   objLoader.load('light-base.obj', function(object) {
     object.traverse(function(child) {
         if (child instanceof THREE.Mesh){
@@ -278,7 +274,7 @@ var mat_tv = new THREE.MeshPhysicalMaterial({color: 0x141414,
         clearcoatRoughness: 0.5
 });
 var objLoader = new THREE.OBJLoader();
-objLoader.setPath('/obj/');
+objLoader.setPath('obj/');
 objLoader.load('TV-frame.obj', function(object) {
 
 	object.traverse(function(child) {
