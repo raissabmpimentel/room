@@ -10,7 +10,7 @@ var scene = new THREE.Scene();
 
 // Camera
 var camera = new THREE.PerspectiveCamera( 50, window.innerWidth/window.innerHeight, 0.1, 100000 );
-camera.position.set(200,0,200);
+camera.position.set(150,65,150);
 
 // Renderer
 var renderer = new THREE.WebGLRenderer({
@@ -60,9 +60,9 @@ scene.background = new THREE.CubeTextureLoader()
 		'negz.jpg'
 	] );
 
-// Visualização dos eixos (RETIRAR DEPOIS)
-var axesHelper = new THREE.AxesHelper(4);
-scene.add(axesHelper);
+// // Visualização dos eixos (RETIRAR DEPOIS)
+// var axesHelper = new THREE.AxesHelper(4);
+// scene.add(axesHelper);
 
 // Importacao de modelos junto com mapeamento de material (de textura ou cor)
 
