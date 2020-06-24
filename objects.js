@@ -30,6 +30,19 @@ objLoader.load('shelves.obj', function(object) {
 	scene.add(object);
 })
 
+// Pes da mesa
+var objLoader = new THREE.OBJLoader();
+objLoader.setPath('obj/');
+objLoader.load('table-feet.obj', function(object) {
+	object.traverse(function(child) {
+        if (child instanceof THREE.Mesh){
+            child.material = mat_wood;
+        }
+    });
+	scene.add(object);
+})
+
+
 // Haste do batente
 var mat_sup = new THREE.MeshPhongMaterial({
   color: 0x4c4c4c,
@@ -214,18 +227,7 @@ objLoader.load('window-glass.obj', function(object) {
 	scene.add(object);
 })
 
-// Mesa
-var objLoader = new THREE.OBJLoader();
-objLoader.setPath('obj/');
-objLoader.load('table-feet.obj', function(object) {
-	object.traverse(function(child) {
-        if (child instanceof THREE.Mesh){
-            child.material = mat_wood;
-        }
-    });
-	scene.add(object);
-})
-
+// Tabua da mesa
 var mat_wood_2 = new THREE.MeshLambertMaterial({color: 0x96653A});
 var objLoader = new THREE.OBJLoader();
 objLoader.setPath('obj/');
@@ -252,6 +254,7 @@ objLoader.load('light-bulb.obj', function(object) {
 	scene.add(object);
 })
 
+// Haste da lampada
 var mat_lightbase = new THREE.MeshPhysicalMaterial({color: 0xa8a8a8,
         emissive: 0x323232,
         roughness: 0.5,
@@ -343,3 +346,15 @@ function randomizeParams() {
 }
 
 
+// Funcao para ajustar parametros da cena com o redimensionamento
+function onWindowResize() {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      uniformsVideo.u_resolution.value.x = renderer.domElement.width;
+      uniformsVideo.u_resolution.value.y = renderer.domElement.height;
+      uniformsNoise.u_resolution.value.x = renderer.domElement.width;
+      uniformsNoise.u_resolution.value.y = renderer.domElement.height;
+  }
+  
+  window.addEventListener('resize', onWindowResize, false);

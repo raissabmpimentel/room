@@ -65,16 +65,3 @@ scene.add( light_aux_5 );
 pointlight = new THREE.PointLight( 0xFFFFCC, 1, 0);
 pointlight.position.set( -100, 50, -65 ); // Posicao proxima do centro lampada
 scene.add( pointlight );
-
-// Funcao para ajustar parametros da cena com o redimensionamento
-function onWindowResize() {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-      uniformsVideo.u_resolution.value.x = renderer.domElement.width;
-      uniformsVideo.u_resolution.value.y = renderer.domElement.height;
-      uniformsNoise.u_resolution.value.x = renderer.domElement.width;
-      uniformsNoise.u_resolution.value.y = renderer.domElement.height;
-  }
-  
-  window.addEventListener('resize', onWindowResize, false);
