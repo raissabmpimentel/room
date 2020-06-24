@@ -32,7 +32,6 @@ var soundParams = {
 var f2 = gui.addFolder('Sound');
 f2.add(soundParams, 'mute').onChange(onToggleMute);
 f2.add(soundParams, 'volume', 0, 100).step(1).onChange(onVolumeChange);
-gui.close();
 
 function onToggleMute() {
 	if(soundParams.mute == true){

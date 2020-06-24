@@ -1,51 +1,3 @@
-// Declaracao de variaveis
-var noise = false;
-var time = 30;
-var texture;
-
-// Definicao da cena
-var scene = new THREE.Scene();
-
-// Camera
-var camera = new THREE.PerspectiveCamera( 50, window.innerWidth/window.innerHeight, 0.1, 100000 );
-camera.position.set(150,65,150);
-
-// Renderer
-var renderer = new THREE.WebGLRenderer({
-canvas:document.getElementById("mycanvas"),
-antialias:true,
-alpha:false
-});
-renderer.setSize( window.innerWidth, window.innerHeight );
-renderer.setClearColor("#b3bdc9");
-document.body.appendChild( renderer.domElement );
-renderer.setPixelRatio( window.devicePixelRatio );
-
-// Controle da camera
-var controls = new THREE.OrbitControls(camera, renderer.domElement);
- controls.enableDamping = true;
- controls.dampingFactor = 0.25;
- controls.enableZoom = true;
-
-
-// Iluminacao
-var keyLight = new THREE.DirectionalLight(0x808080, 0.5);
-keyLight.position.set(-100, 0, 100);
-
-var fillLight = new THREE.DirectionalLight(0x808080, 0.75);
-fillLight.position.set(100, 0, 100);
-
-var fillLight2 = new THREE.DirectionalLight(0x808080, 0.5);
-fillLight2.position.set(100, 100, 100);
-
-var fillLight3 = new THREE.DirectionalLight(0x808080, 1);
-fillLight3.position.set(0, 0, -100);
-
-scene.add(keyLight);
-scene.add(fillLight);
-scene.add(fillLight2);
-scene.add(fillLight3);
-
 // Background
 scene.background = new THREE.CubeTextureLoader()
 	.setPath( 'background/' )
@@ -58,11 +10,12 @@ scene.background = new THREE.CubeTextureLoader()
 		'negz.jpg'
 	] );
 
-// // Visualização dos eixos (RETIRAR DEPOIS)
+// Visualização dos eixos (RETIRAR DEPOIS)
 // var axesHelper = new THREE.AxesHelper(4);
 // scene.add(axesHelper);
 
 // Importacao de modelos junto com mapeamento de material (de textura ou cor)
+var texture;
 
 // Batente da TV
 texture = new THREE.TextureLoader().load('img/wood.jpg');
@@ -336,52 +289,12 @@ objLoader.load('TV-frame.obj', function(object) {
 	scene.add(object);
 })
 
-// Light Controllers
-var lightParams = {
-  lamp: 100,
-  ambient: 100
-}
-
-gui = new dat.GUI();
-var f1 = gui.addFolder('Lights');
-f1.add(lightParams, 'lamp', 0, 100).step(1).onChange(onLampIntensityChange);
-f1.add(lightParams, 'ambient', 0, 100).step(1).onChange(onAmbientLightIntensityChange);
-
-// Luz para destacar a lampada
-var light_aux_1 = new THREE.PointLight(0xFFFFCC, 0.75, 80);
-light_aux_1.position.set(-100, 50, -10);
-scene.add(light_aux_1);
-
-var light_aux_2 = new THREE.PointLight(0xFFFFCC, 0.75, 80);
-light_aux_2.position.set(-100, 50, -100);
-scene.add(light_aux_2);
-
-// Luz amarela que sai da lampada
-pointlight = new THREE.PointLight( 0xFFFFCC, 0.85, 0);
-pointlight.position.set( -100, 50, -80 ); // Posicao proxima da lampada
-scene.add( pointlight );
-
-function onLampIntensityChange() {
-  light_aux_1.intensity = 0.75*(lightParams.lamp/100);
-  light_aux_2 .intensity = 0.75*(lightParams.lamp/100);
-  pointlight.intensity = 0.85*(lightParams.lamp/100);
-  console.log("entrou");
-}
-
-function onAmbientLightIntensityChange() {
-  keyLight.intensity = 0.5*(lightParams.ambient/100);
-  fillLight.intensity = 0.75*(lightParams.ambient/100);
-  fillLight2.intensity = 0.5*(lightParams.ambient/100);
-  fillLight3.intensity = 1*(lightParams.ambient/100);
-}
-
-
-// Animacao TV
+// TV shader
 var video = document.createElement('video');
 video.loop = false;
 video.muted = true;
 video.src = 'res/samara.mp4';
-var texture = new THREE.VideoTexture( video );
+texture = new THREE.VideoTexture( video );
 texture.minFilter = THREE.LinearFilter;
 texture.magFilter = THREE.LinearFilter;
 texture.format = THREE.RGBFormat;
@@ -428,111 +341,10 @@ function randomizeParams() {
 	uniformsNoise.u_amount.value = 400 + Math.random()*(1000 - 400);
 }
 
-// Audio Controllers
-var soundParams = {
-	mute: false,
-  volume: 50
-};
-
-var f2 = gui.addFolder('Sound');
-f2.add(soundParams, 'mute').onChange(onToggleMute);
-f2.add(soundParams, 'volume', 0, 100).step(1).onChange(onVolumeChange);
-gui.close();
-
-// Para ouvir o audio
-var soundVideo, soundNoise;
-var listenerNoise, listenerVideo;
-listenerNoise = new THREE.AudioListener();
-listenerVideo = new THREE.AudioListener();
-soundNoise = new THREE.PositionalAudio(listenerNoise);
-soundVideo = new THREE.PositionalAudio(listenerVideo);
-soundVideo.load('res/samara.mp4');
-
-var audioLoader = new THREE.AudioLoader();
-audioLoader.load( 'res/tvnoise.mp4', function( buffer ) {
-	soundNoise.setBuffer( buffer );
-  soundNoise.setLoop( true );
-	soundNoise.setVolume( 0.1 );
-	soundNoise.play();
-});
-
-scene.add( listenerNoise );
-scene.add( listenerVideo );
-
-function onToggleMute() {
-	if(soundParams.mute == true){
-    soundNoise.setVolume(0.0);
-    soundVideo.setVolume(0.0);
-  } else {
-    if(noise == true){
-      soundNoise.setVolume(0.1*(soundParams.volume/100));
-    } else {
-      soundVideo.setVolume(0.7*(soundParams.volume/100));
-    }
-  }
-}
-
-function onVolumeChange() {
-	if(noise == true){
-    soundNoise.setVolume(0.1*(soundParams.mute == true ? 0.0 : 1.0)*(soundParams.volume/100));
-  } else {
-    soundVideo.setVolume(0.7*(soundParams.mute == true ? 0.0 : 1.0)*(soundParams.volume/100));
-  }
-}
-
-// Funcao para animar a cena
-var animate = function () {
-
-	randomizeParams();
-	if(time > 29){
-		time = 0.0;
-
-		if(noise == false){
-		uniformsNoise.u_time.value = time;
-
-		soundNoise.setVolume(0.1*(soundParams.mute == true ? 0 : 1)*(soundParams.volume/100));
-		soundVideo.setVolume(0.0);
-
-		scene.remove(meshVideo);
-		scene.add(meshNoise);
-
-		noise = true;
-		} else{
-		uniformsVideo.u_time.value = time;
-
-		soundVideo.setVolume(0.7*(soundParams.mute == true ? 0 : 1)*(soundParams.volume/100));
-		soundNoise.setVolume(0.0);
-		soundVideo.play();
-		video.play();
-
-		scene.remove(meshNoise);
-		scene.add(meshVideo);
-
-		noise = false;
-		}
-	} else {
-		time += 0.05;
-
-		if(noise == true){
-		    uniformsNoise.u_time.value = time;
-		} else{
-		    uniformsVideo.u_time.value = time;
-		}
-	}
-
-	requestAnimationFrame( animate );
-
-	// Atualizar visao
-	controls.update();
-
-	// Desenhar cena
-	renderer.render(scene, camera);
-};
-
 // Funcao para ajustar parametros da cena com o redimensionamento
 function onWindowResize() {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
 	renderer.setSize(window.innerWidth, window.innerHeight);
 	uniformsVideo.u_resolution.value.x = renderer.domElement.width;
 	uniformsVideo.u_resolution.value.y = renderer.domElement.height;
@@ -541,6 +353,3 @@ function onWindowResize() {
 }
 
 window.addEventListener('resize', onWindowResize, false);
-
-// Invoca o loop da animação
-animate();
