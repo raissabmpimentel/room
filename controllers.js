@@ -11,8 +11,11 @@ f1.add(lightParams, 'ambient', 0, 100).step(1).onChange(onAmbientLightIntensityC
 
 function onLampIntensityChange() {
   light_aux_1.intensity = 0.75*(lightParams.lamp/100);
-  light_aux_2 .intensity = 0.75*(lightParams.lamp/100);
-  pointlight.intensity = 0.85*(lightParams.lamp/100);
+  light_aux_2.intensity = 0.75*(lightParams.lamp/100);
+  light_aux_3.intensity = 0.75*(lightParams.lamp/100);
+  light_aux_4.intensity = 1.5*(lightParams.lamp/100);
+  light_aux_5.intensity = 1.3*(lightParams.lamp/100);
+  pointlight.intensity = 1*(lightParams.lamp/100);
   console.log("entrou");
 }
 
