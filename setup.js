@@ -53,21 +53,3 @@ scene.add(keyLight);
 scene.add(fillLight);
 scene.add(fillLight2);
 scene.add(fillLight3);
-
-// Audio
-var soundVideo, soundNoise;
-var listener;
-listener = new THREE.AudioListener();
-soundNoise = new THREE.PositionalAudio(listener);
-soundVideo = new THREE.PositionalAudio(listener);
-soundVideo.load('res/samara.mp4');
-
-var audioLoader = new THREE.AudioLoader();
-audioLoader.load( 'res/tvnoise.mp4', function( buffer ) {
-	soundNoise.setBuffer( buffer );
-  soundNoise.setLoop( true );
-	soundNoise.setVolume( 0.15 );
-	soundNoise.play();
-});
-
-camera.add(listener);
