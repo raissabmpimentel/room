@@ -56,20 +56,18 @@ scene.add(fillLight3);
 
 // Audio
 var soundVideo, soundNoise;
-var listenerNoise, listenerVideo;
-listenerNoise = new THREE.AudioListener();
-listenerVideo = new THREE.AudioListener();
-soundNoise = new THREE.PositionalAudio(listenerNoise);
-soundVideo = new THREE.PositionalAudio(listenerVideo);
+var listener;
+listener = new THREE.AudioListener();
+soundNoise = new THREE.PositionalAudio(listener);
+soundVideo = new THREE.PositionalAudio(listener);
 soundVideo.load('res/samara.mp4');
 
 var audioLoader = new THREE.AudioLoader();
 audioLoader.load( 'res/tvnoise.mp4', function( buffer ) {
 	soundNoise.setBuffer( buffer );
   soundNoise.setLoop( true );
-	soundNoise.setVolume( 0.1 );
+	soundNoise.setVolume( 0.15 );
 	soundNoise.play();
 });
 
-scene.add( listenerNoise );
-scene.add( listenerVideo );
+camera.add(listener);

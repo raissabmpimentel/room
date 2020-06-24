@@ -12,7 +12,7 @@ var animate = function () {
 		if(noise == false){
 			uniformsNoise.u_time.value = time;
 
-			soundNoise.setVolume(0.1*(soundParams.mute == true ? 0 : 1)*(soundParams.volume/100));
+			soundNoise.setVolume(0.15*(soundParams.mute == true ? 0 : 1)*(soundParams.volume/100));
 			soundVideo.setVolume(0.0);
 
 			scene.remove(meshVideo);
@@ -22,7 +22,7 @@ var animate = function () {
 		} else{
 			uniformsVideo.u_time.value = time;
 
-			soundVideo.setVolume(0.7*(soundParams.mute == true ? 0 : 1)*(soundParams.volume/100));
+			soundVideo.setVolume(1.0*(soundParams.mute == true ? 0 : 1)*(soundParams.volume/100));
 			soundNoise.setVolume(0.0);
 			soundVideo.play();
 			video.play();

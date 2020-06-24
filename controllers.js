@@ -26,7 +26,7 @@ function onAmbientLightIntensityChange() {
 // Audio Controllers
 var soundParams = {
 	mute: false,
-  volume: 50
+  volume: 100
 };
 
 var f2 = gui.addFolder('Sound');
@@ -39,17 +39,17 @@ function onToggleMute() {
     soundVideo.setVolume(0.0);
   } else {
     if(noise == true){
-      soundNoise.setVolume(0.1*(soundParams.volume/100));
+      soundNoise.setVolume(0.15*(soundParams.volume/100));
     } else {
-      soundVideo.setVolume(0.7*(soundParams.volume/100));
+      soundVideo.setVolume(1.0*(soundParams.volume/100));
     }
   }
 }
 
 function onVolumeChange() {
 	if(noise == true){
-    soundNoise.setVolume(0.1*(soundParams.mute == true ? 0.0 : 1.0)*(soundParams.volume/100));
+    soundNoise.setVolume(0.15*(soundParams.mute == true ? 0.0 : 1.0)*(soundParams.volume/100));
   } else {
-    soundVideo.setVolume(0.7*(soundParams.mute == true ? 0.0 : 1.0)*(soundParams.volume/100));
+    soundVideo.setVolume(1.0*(soundParams.mute == true ? 0.0 : 1.0)*(soundParams.volume/100));
   }
 }
