@@ -290,7 +290,7 @@ objLoader.load('TV-frame.obj', function(object) {
 	scene.add(object);
 })
 
-// TV shader
+// TV Video shader
 var video = document.createElement('video');
 video.loop = false;
 video.muted = true;
@@ -301,6 +301,7 @@ texture.magFilter = THREE.LinearFilter;
 texture.format = THREE.RGBFormat;
 
 var geometry = new THREE.PlaneGeometry( 120, 68, 1);
+
 var uniformsVideo = {
 	u_tDiffuse: { type: "t", value: texture },
 	u_amount: { type: "f", value: 40.0 },
@@ -309,20 +310,30 @@ var uniformsVideo = {
 	u_angle:    { type: "f", value: 0.05 },
 	u_magnitude:    { type: "f", value: 0.01 }
 };
+
+uniformsVideo.u_resolution.value.x = renderer.domElement.width;
+uniformsVideo.u_resolution.value.y = renderer.domElement.height;
+
 var materialVideo = new THREE.ShaderMaterial( {
 	uniforms: uniformsVideo,
 	vertexShader: document.getElementById( 'vertexVideoShader' ).textContent,
 	fragmentShader: document.getElementById( 'fragmentVideoShader' ).textContent,
 	side: THREE.DoubleSide
 } );
+
 var meshVideo = new THREE.Mesh( geometry, materialVideo);
 meshVideo.position.set(-89,-29,-206);
 
+// TV Noise shader
 var uniformsNoise = {
 	u_amount: { type: "f", value: 100.0 },
 	u_time: { type: "f", value: 1.0 },
 	u_resolution: { type: "v2", value: new THREE.Vector2() },
 };
+
+uniformsNoise.u_resolution.value.x = renderer.domElement.width;
+uniformsNoise.u_resolution.value.y = renderer.domElement.height;
+
 var materialNoise = new THREE.ShaderMaterial( {
 	uniforms: uniformsNoise,
 	vertexShader: document.getElementById( 'vertexNoiseShader' ).textContent,
@@ -331,11 +342,6 @@ var materialNoise = new THREE.ShaderMaterial( {
 } );
 var meshNoise = new THREE.Mesh( geometry, materialNoise );
 meshNoise.position.set(-89,-29,-206);
-
-uniformsVideo.u_resolution.value.x = renderer.domElement.width;
-uniformsVideo.u_resolution.value.y = renderer.domElement.height;
-uniformsNoise.u_resolution.value.x = renderer.domElement.width;
-uniformsNoise.u_resolution.value.y = renderer.domElement.height;
 
 function randomizeParams() {
 	uniformsVideo.u_amount.value = Math.random() * 100;

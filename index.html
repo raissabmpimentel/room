@@ -42,30 +42,35 @@
 					  }
 
 					  void main() {
-						vec2 st = gl_FragCoord.xy/u_resolution.xy;
-						st *= u_amount; // Scale the coordinate system by 10
-						vec2 ipos = floor(st);  // get the integer coords
+							// armazena um sistema de coordenadas normalizado
+							vec2 st = gl_FragCoord.xy/u_resolution.xy;
 
-						// Assign a random value based on the integer coord
-						float noise = randomHoriz(ipos*u_time);
+							// multiplica a escala do sistema de cordenadas por u_amount
+							st *= u_amount;
 
-						float rdn = random(ipos*u_time);
-						vec2 offset = u_magnitude*(1.0+rdn)*vec2( cos(u_angle*(1.0+rdn)), sin(u_angle*(1.0+rdn)));
-						vec4 red = texture2D(u_tDiffuse, vUv + offset);
-						vec4 green = texture2D(u_tDiffuse, vUv);
-						vec4 blue = texture2D(u_tDiffuse, vUv - offset);
+							// pega as coordenadas inteiras do sistema para criar um grid
+							vec2 ipos = floor(st);
 
-						//gl_FragColor = vec4(vec3(color.x - noise.x, color.y - noise.y, color.z - noise.z),0.1);
-						gl_FragColor = vec4(red.r - noise, green.g - noise, blue.b - noise, 1.0);
+							// atribui um valor aleatório com base nas coordenadas inteiras
+							float noise = randomHoriz(ipos*u_time);
+
+							// desloca o sistema de coordenadas das cores vermelho e azul
+							float rdn = random(ipos*u_time);
+							vec2 offset = u_magnitude*(1.0+rdn)*vec2( cos(u_angle*(1.0+rdn)), sin(u_angle*(1.0+rdn)));
+							vec4 red = texture2D(u_tDiffuse, vUv + offset);
+							vec4 green = texture2D(u_tDiffuse, vUv);
+							vec4 blue = texture2D(u_tDiffuse, vUv - offset);
+
+							gl_FragColor = vec4(red.r - noise, green.g - noise, blue.b - noise, 1.0);
 					}
 				  </script>
 				  <script id="vertexNoiseShader" type="x-shader/x-vertex">
-					varying vec2 vUv;
+						varying vec2 vUv;
 
-					void main() {
-					  vUv = uv;
-					  gl_Position = projectionMatrix*modelViewMatrix*vec4(position, 1.0);
-					}
+						void main() {
+						  vUv = uv;
+						  gl_Position = projectionMatrix*modelViewMatrix*vec4(position, 1.0);
+						}
 				  </script>
 				  <script id="fragmentNoiseShader" type="x-shader/x-fragment">
 					  uniform vec2 u_resolution;
@@ -79,11 +84,16 @@
 					  }
 
 					  void main() {
+						// armazena um sistema de coordenadas normalizado
 						vec2 st = gl_FragCoord.xy/u_resolution.xy;
-						st *= u_amount; // Scale the coordinate system by 10
-						vec2 ipos = floor(st);  // get the integer coords
 
-						// Assign a random value based on the integer coord
+						// multiplica a escala do sistema de cordenadas por u_amount
+						st *= u_amount;
+
+						// pega as coordenadas inteiras do sistema para criar um grid
+						vec2 ipos = floor(st);
+
+						// atribui um valor aleatório com base nas coordenadas inteiras
 						vec3 noise = vec3(random2(ipos*u_time));
 
 						gl_FragColor = vec4(noise, 1.0);
