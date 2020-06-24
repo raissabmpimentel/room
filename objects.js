@@ -342,15 +342,4 @@ function randomizeParams() {
 	uniformsNoise.u_amount.value = 400 + Math.random()*(1000 - 400);
 }
 
-// Funcao para ajustar parametros da cena com o redimensionamento
-function onWindowResize() {
-  camera.aspect = window.innerWidth / window.innerHeight;
-  camera.updateProjectionMatrix();
-	renderer.setSize(window.innerWidth, window.innerHeight);
-	uniformsVideo.u_resolution.value.x = renderer.domElement.width;
-	uniformsVideo.u_resolution.value.y = renderer.domElement.height;
-	uniformsNoise.u_resolution.value.x = renderer.domElement.width;
-	uniformsNoise.u_resolution.value.y = renderer.domElement.height;
-}
 
-window.addEventListener('resize', onWindowResize, false);
