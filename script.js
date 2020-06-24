@@ -40,9 +40,13 @@ fillLight.position.set(100, 0, 100);
 var fillLight2 = new THREE.DirectionalLight(0x808080, 0.5);
 fillLight2.position.set(100, 100, 100);
 
+var fillLight3 = new THREE.DirectionalLight(0x808080, 1);
+fillLight3.position.set(0, 0, -100);
+
 scene.add(keyLight);
 scene.add(fillLight);
 scene.add(fillLight2);
+scene.add(fillLight3);
 
 // Background
 scene.background = new THREE.CubeTextureLoader()
@@ -249,13 +253,17 @@ objLoader.load('TV-frame.obj', function(object) {
 })
 
 // Luz para destacar a lampada
-var light_aux = new THREE.PointLight(0xffffff, 0.75, 80);
-light_aux.position.set(-100, 50, -10);
-scene.add(light_aux);
+var light_aux_1 = new THREE.PointLight(0xFFFFCC, 0.75, 80);
+light_aux_1.position.set(-100, 50, -10);
+scene.add(light_aux_1);
+
+var light_aux_2 = new THREE.PointLight(0xFFFFCC, 0.75, 80);
+light_aux_2.position.set(-100, 50, -100);
+scene.add(light_aux_2);
 
 // Luz amarela que sai da lampada
 pointlight = new THREE.PointLight( 0xFFFFCC, 0.85, 0);
-pointlight.position.set( -100, 50, -70 ); // Posicao proima da lampada
+pointlight.position.set( -100, 50, -80 ); // Posicao proxima da lampada
 scene.add( pointlight );
 
 // Animacao TV
